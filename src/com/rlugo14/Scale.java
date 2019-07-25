@@ -14,12 +14,10 @@ class Scale {
 		int sumOfAllMasses = allMasses.stream().mapToInt(mass -> mass).sum();
 		
 		if (weight > sumOfAllMasses) {
-			throw new NonWeightableException("Weight too big and therefore not weightable");
-		}
-		
-		if (allMasses.contains(weight)) {
-			Integer containedMass = allMasses.get(allMasses.indexOf(weight));
-			neededMasses.add(containedMass);
+			return neededMasses;
+		} else if (allMasses.contains(weight)) {
+			Integer result = allMasses.get(allMasses.indexOf(weight));
+			neededMasses.add(result);
 			return neededMasses;
 		}
 		
@@ -42,9 +40,8 @@ class Scale {
 			massesRepetitions.clear();
 		}
 		Collections.sort(desiredIndexes);
-		for(Integer index: desiredIndexes) {
-			neededMasses.add(allMasses.get(index));
-		}
+		neededMasses = desiredIndexes.stream().map(index -> allMasses.get(index)).collect(Collectors.toList());
+		
 		return neededMasses;
 	}
 }
