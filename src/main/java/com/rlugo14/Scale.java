@@ -3,6 +3,7 @@ package com.rlugo14;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class Scale {
 	static List<Integer> getMasses(Integer weight, List<Integer> allMasses) throws NonWeightableException{
