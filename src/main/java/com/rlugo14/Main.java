@@ -1,15 +1,16 @@
 package com.rlugo14;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        List<Integer> allMasses = Arrays.asList(16, 1, 128, 20, 56, 100, 70, 3, 5, 10, 15, 45, 14, 4, 6);
-        int weight = 28;
+        List<Integer> allMasses = new LinkedList<>(Arrays.asList(1, 3, 4, 6, 22, 56, 114, 400, 158));
+        int weight = 333;
         try {
-            Scale.getMasses(weight, allMasses);
+            System.out.println(Scale.getMasses(weight, allMasses));
         } catch (NonWeightableException e) {
             e.printStackTrace();
         }

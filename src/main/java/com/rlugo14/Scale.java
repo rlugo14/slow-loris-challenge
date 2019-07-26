@@ -1,48 +1,48 @@
 package com.rlugo14;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 class Scale {
 	static List<Integer> getMasses(Integer weight, List<Integer> allMasses) throws NonWeightableException{
-		List<Integer> massesRepetitions = new ArrayList<>(allMasses.size());
-		List<Integer> neededMasses = new ArrayList<>();
 		Collections.sort(allMasses);
-		List<Integer> desiredIndexes = new ArrayList<>();
+		List<Integer> neededMasses = new ArrayList<>();
+		List<Integer> massesRepetitions = new ArrayList<>();
 		
-		int sumOfAllMasses = allMasses.stream().mapToInt(mass -> mass).sum();
+		int restWeight = weight;
 		
-		if (weight > sumOfAllMasses) {
-			return neededMasses;
-		} else if (allMasses.contains(weight)) {
-			Integer result = allMasses.get(allMasses.indexOf(weight));
-			neededMasses.add(result);
-			return neededMasses;
-		}
-		
-		while (weight > 0) {
-			for (Integer mass : allMasses) {
-				massesRepetitions.add(weight/mass);
+		while (restWeight > 0) {
+			for (int mass: allMasses) {
+				massesRepetitions.add(restWeight/mass);
 			}
-			
-			try {
-				int indexOfInterest = massesRepetitions.lastIndexOf(1);
-				desiredIndexes.add(indexOfInterest);
-				int nonRepeatedMass = massesRepetitions.get(indexOfInterest);
-				int massToSubstract = allMasses.get(massesRepetitions.indexOf(nonRepeatedMass));
-				
-				weight -= massToSubstract;
-			} catch (ArrayIndexOutOfBoundsException e) {
-				throw new NonWeightableException("No possible to weight with available masses");
+			int lessRepetitions = massesRepetitions.stream().min(Comparator.comparingInt(rep -> rep > 0 ? rep : 1000)).get();
+			System.out.println(lessRepetitions);
+			int sumAllMasses = allMasses.stream().mapToInt(mass -> mass).sum();
+			if (restWeight > sumAllMasses) {
+				throw new NonWeightableException("Not possible to weight using given masses");
 			}
-			
+			if (allMasses.contains(restWeight)) {
+				neededMasses.add(restWeight);
+				break;
+			}
+			if (lessRepetitions < 3) {
+				int massToSubstract = allMasses.get(massesRepetitions.lastIndexOf(lessRepetitions));
+				neededMasses.add(massToSubstract);
+				restWeight -= massToSubstract;
+			} else {
+				allMasses.remove(neededMasses.get(0));
+				neededMasses.clear();
+				restWeight = weight;
+			}
 			massesRepetitions.clear();
 		}
-		Collections.sort(desiredIndexes);
-		neededMasses = desiredIndexes.stream().map(index -> allMasses.get(index)).collect(Collectors.toList());
-		
 		return neededMasses;
 	}
 }
