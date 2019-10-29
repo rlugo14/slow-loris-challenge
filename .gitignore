@@ -6,6 +6,16 @@
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
+# Target Directory
+target/
+
+# Visual Studio Code folder
+.vscode/
+
+.project
+.settings/
+
+.classpath
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
